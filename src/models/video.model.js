@@ -1,23 +1,13 @@
 const mongoose = require("mongoose");
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-      index: true,
-    },
-    fullName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: [true, "Password is required"] },
-    avatar: { type: String, default: "" },
-    coverPhoto: { type: String, default: "" },
-    watchHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
-    refreshToken: { type: String, default: "" },
-  },
-  { timestamps: true }
-);
-
-export const User = mongoose.model("User", userSchema);
+const videoSchema = new mongoose.Schema({
+    videoFile: { type: String, required: true },
+    thumbnail: { type: String, required: true },
+    description: { type: String, required: true },
+    title: { type: String, required: true },
+    duration: { type: Number, required: true },
+    views: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
+    dislikes: { type: Number, default: 0 },
+    ispublic: { type: Boolean, default: true },
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+}, { timestamps: true });
