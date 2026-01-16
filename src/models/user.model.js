@@ -29,4 +29,26 @@ userSchema.pre("save", function (next) {
   next();
 });
 
+userSchema.methods.generateAccessToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, username: this.username },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+    }
+  );
+  return token;
+};
+
+userSchema.methods.generateRefreshToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, username: this.username },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+    }
+  );
+  return token;
+};
+
 export const User = mongoose.model("User", userSchema);
