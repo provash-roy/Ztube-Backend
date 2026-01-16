@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const jwt = require("jwt");
+re;
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -20,6 +22,11 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
+userSchema.pre("save", function (next) {
+  if (this.isModified("password")) {
+    this.password = hashPassword(this.password);
+  }
+  next();
+});
 
 export const User = mongoose.model("User", userSchema);
