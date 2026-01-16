@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", function (next) {
   if (this.isModified("password")) {
-    this.password = hashPassword(this.password);
+    this.password = hashPassword(this.password, 10);
   }
   next();
 });
@@ -49,6 +49,10 @@ userSchema.methods.generateRefreshToken = function () {
     }
   );
   return token;
+};
+
+userSchema.methods.comparePassword = function (candidatePassword) {
+  return comparePassword(candidatePassword, this.password);
 };
 
 export const User = mongoose.model("User", userSchema);
