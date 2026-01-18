@@ -1,18 +1,7 @@
-const express = require("express");
-const { connect } = require("mongoose");
-const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT || 4000;
-
+const app = require("./app");
 const connectDB = require("./db");
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.get("/health", (req, res) => {
-  res.send("health okk");
-});
 
 connectDB()
   .then(() => {

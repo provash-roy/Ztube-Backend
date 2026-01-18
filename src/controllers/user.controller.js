@@ -1,0 +1,31 @@
+const ApiError = require("../utils/apiError");
+const ApiResponse = require("../utils/apiResponse");
+const User = require("../models/user.model");
+const asyncHandler = require("../utils/asyncHandler");
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { username, fullName, email, password } = req.body;
+
+  if (
+    [username, fullName, email, password].some((field) => field?.trim() === "")
+  ) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    throw new ApiError(409, "User with this email already exists");
+  }
+
+  const newUser = await User.create({ username, fullName, email, password });
+
+  if (!newUser) {
+    throw new ApiError(500, "Failed to register user");
+  }
+
+  return ApiResponse(res, 201, true, "User registered successfully", {
+    newUser,
+  });
+});
+
+module.exports = registerUser;
