@@ -1,9 +1,10 @@
-const registerUser = require("../controllers/user.controller");
+import registerUser from "../controllers/user.controller.js";
+import express from "express";
 
-const router = require("express").Router();
+const router = express.Router();
 
 router.route("/register").get((req, res) => {
   res.send("User registration endpoint");
 });
 
-module.exports = router;
+export default router;

@@ -1,10 +1,14 @@
-const express = require("express");
+import express from "express";
+import userRouter from "./routers/user.router.js";
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const userRouter = require("./routers/user.router.js");
+app.get("/", (req, res) => {
+  res.send("Welcome to the API");
+});
 
 app.use("/api/v1/users", userRouter);
 
-module.exports = app;
+export default app;

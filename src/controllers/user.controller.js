@@ -1,7 +1,7 @@
-const ApiError = require("../utils/apiError");
-const ApiResponse = require("../utils/apiResponse");
-const User = require("../models/user.model");
-const asyncHandler = require("../utils/asyncHandler");
+import ApiError from "../utils/apiError.js";
+import ApiResponse from "../utils/apiResponse.js";
+import User from "../models/user.model.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullName, email, password } = req.body;
@@ -28,4 +28,4 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = registerUser;
+export default registerUser;

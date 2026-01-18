@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const paginate = require("mongoose-paginate-v2");
+import mongoose from "mongoose";
+import paginate from "mongoose-paginate-v2";
+
 const videoSchema = new mongoose.Schema(
   {
     videoFile: { type: String, required: true },
@@ -17,9 +18,9 @@ const videoSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 videoSchema.plugin(paginate);
-
-export const Video = mongoose.model("Video", videoSchema);
+const Video = mongoose.model("Video", videoSchema);
+export default Video;

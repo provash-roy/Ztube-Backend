@@ -5,4 +5,5 @@ const ApiResponse = (res, statusCode, success = true, message, data = null) => {
     data,
   });
 };
-module.exports = ApiResponse;
+
+export default ApiResponse;

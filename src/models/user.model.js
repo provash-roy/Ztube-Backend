@@ -1,6 +1,5 @@
-const mongoose = require("mongoose");
-const jwt = require("jwt");
-re;
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -19,7 +18,7 @@ const userSchema = new mongoose.Schema(
     watchHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
     refreshToken: { type: String, default: "" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.pre("save", function (next) {
@@ -35,7 +34,7 @@ userSchema.methods.generateAccessToken = function () {
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-    }
+    },
   );
   return token;
 };
@@ -46,7 +45,7 @@ userSchema.methods.generateRefreshToken = function () {
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
-    }
+    },
   );
   return token;
 };
@@ -55,4 +54,5 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   return comparePassword(candidatePassword, this.password);
 };
 
-export const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+export default User;
