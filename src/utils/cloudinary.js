@@ -29,4 +29,4 @@ const uploadToCloudinary = (filePath) => {
   }
 };
 
-export default cloudinary;
+export default uploadToCloudinary;

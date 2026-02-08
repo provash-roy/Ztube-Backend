@@ -1,5 +1,8 @@
+import User from "../models/user.model";
+import ApiError from "../utils/apiError";
 import ApiResponse from "../utils/apiResponse";
 import asyncHandler from "../utils/asyncHandler";
+import uploadToCloudinary from "../utils/cloudinary";
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const search = req.query.search || "";
@@ -60,9 +63,34 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 const uploadAVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
-  if (!(title || description)) {
-    new ApiResponse(400, "Title or Description is invalid");
+
+  if (!title || !description) {
+    return ApiResponse(res, 400, "Title or Description is invalid");
   }
+
+  const videoLocalPath = req.files?.videoFile?.[0]?.path;
+  if (!videoLocalPath) {
+    throw new ApiError(400, "Video path is required");
+  }
+
+  const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
+  if (!thumbnailLocalPath) {
+    throw new ApiError(400, "Thumbnail path is required");
+  }
+
+  const videoFile = await uploadToCloudinary(videoLocalPath);
+  const thumbnail = await uploadToCloudinary(thumbnailLocalPath);
+
+  const video = await Video.create({
+    videoFile: videoFile.url,
+    thumbnail: thumbnail.url,
+    owner: req.user._id,
+    title,
+    description,
+    duration: videoFile.duration,
+  });
+
+  return ApiResponse(res, 200, "Video uploaded successfully", video);
 });
 
-export { getAllVideos };
+export { getAllVideos, uploadAVideo };
