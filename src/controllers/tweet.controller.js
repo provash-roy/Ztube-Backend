@@ -46,3 +46,34 @@ const getUserTweet = asyncHandler(async (req, res) => {
     },
   ]);
 });
+
+const updateTweet = asyncHandler(async (req, res) => {
+  const { tweetId } = req.params;
+  const { newContent } = req.body;
+
+  if (!newContent) {
+    throw new ApiError(400, "Invalid Content");
+  }
+
+  const tweet = await Tweet.findByIdAndUpdate(
+    tweetId,
+    {
+      $set: {
+        content: newContent,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+  return ApiResponse(res, 200, "Updated Tweet Successfully", tweet);
+});
+
+const deleteTweet = asyncHandler(async (req, res) => {
+  const { tweetId } = req.params;
+
+  const tweet = await Tweet.findByIdAndDelete(tweetId);
+
+  return ApiResponse(res, 200, "Deleted Tweet Successfully", tweet);
+});
