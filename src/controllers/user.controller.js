@@ -28,4 +28,6 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 });
 
-export default registerUser;
+const loginUser = asyncHandler(async (res, res) => {});
+
+export { registerUser };
