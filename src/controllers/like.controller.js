@@ -49,6 +49,27 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
     return ApiResponse(res200, like, "Unliked the Comment");
   }
 });
+const toggleTweetLike = asyncHandler(async (req, res) => {
+  const { tweetId } = req.params;
+
+  if (!isValidObjectId(tweetId)) {
+    throw new ApiError(400, "Invalid tweetId");
+  }
+
+  const isLiked = await Like.findOne({ tweet: tweetId, likedBy: req.user._id });
+
+  if (!isLiked) {
+    const like = await Like.create({
+      tweet: tweetId,
+      likedBy: req.user._id,
+    });
+
+    return ApiResponse(res, 200, like, "Liked the Tweet");
+  } else {
+    const like = await isLiked.deleteOne();
+    return ApiResponse(res, 200, like, "Unliked the Tweet");
+  }
+});
 
 const getLikedVideos = asyncHandler(async (req, res) => {
   const likedVideos = await Like.aggregate([
