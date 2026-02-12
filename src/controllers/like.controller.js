@@ -25,6 +25,31 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
   }
 });
 
+const toggleCommentLike = asyncHandler(async (req, res) => {
+  const { commentId } = req.params;
+
+  if (!isValidObjectId(commentId)) {
+    throw new ApiError(400, "Invalid CommentId");
+  }
+
+  const isLiked = await Like.findOne({
+    comment: commentId,
+    likedBy: req.user._id,
+  });
+
+  if (!isLiked) {
+    const like = await Like.create({
+      comment: commentId,
+      likedBy: req.user._id,
+    });
+
+    return ApiResponse(res, 200, like, "Liked the Comment");
+  } else {
+    const like = await isLiked.deleteOne();
+    return ApiResponse(res200, like, "Unliked the Comment");
+  }
+});
+
 const getLikedVideos = asyncHandler(async (req, res) => {
   const likedVideos = await Like.aggregate([
     {
